@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+
 # This Nagios plugin reads temperature data from a DS18b20 temperature sensor
 # connected to a Raspberry Pi and sends Nagios state and performance data. I
 # assembled this plugin for use with the waterproof version of the DS18b20, as
@@ -22,8 +25,6 @@
 
 
 
-
-#!/usr/bin/env python
 
 import os
 import glob
@@ -78,7 +79,13 @@ os.system('modprobe w1-therm')
 # find the driver command that fetches the temp
 
 therm_dir = '/sys/bus/w1/devices/'
-unit_dir = glob.glob(therm_dir + '28*')[0]
+
+try:
+    unit_dir = glob.glob(therm_dir + '28*')[0]
+except:
+    print 'No device detected.'
+    sys.exit(3)
+
 unit_file = unit_dir + '/w1_slave'
 
 
