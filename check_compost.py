@@ -95,7 +95,7 @@ except:
 unit_file = unit_dir + '/w1_slave'
 
 
-# ask the device to read the temperature and return the data
+# a function to read the temperature and return the raw data
 
 def read_temp_hex():
     f = open(unit_file, 'r')
@@ -104,7 +104,7 @@ def read_temp_hex():
     return lines
 
 
-# parse the data
+# a function to parse the data
 
 def read_temp():
     lines = read_temp_hex()
@@ -122,13 +122,17 @@ def read_temp():
 
 # We're back to code I wrote.
 # Here we compare the temp data to our thresholds, and return state info and
-# perf data, with the appropriate exit code
+# perf data, with the appropriate exit code. But first we call our temp
+# function and store the value as pile_temp.
 
-if read_temp() < args.critical:
-    print 'Critical Temp ',(read_temp()),' F |',(read_temp())
+
+pile_temp = read_temp()
+
+if pile_temp < args.critical:
+    print 'Critical Temp ',(pile_temp),' F |',(pile_temp)
     sys.exit(2)
-elif read_temp() < args.warning:
-    print 'Warning Temp ',(read_temp()),' F |',(read_temp())
+elif pile_temp < args.warning:
+    print 'Warning Temp ',(pile_temp),' F |',(pile_temp)
     sys.exit(1)
 else:
-    print 'OK Temp ',(read_temp()),' F |',(read_temp())
+    print 'OK Temp ',(pile_temp),' F |',(pile_temp)
