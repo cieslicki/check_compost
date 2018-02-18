@@ -78,7 +78,13 @@ os.system('modprobe w1-therm')
 #
 # find the driver command that fetches the temp
 
+
 therm_dir = '/sys/bus/w1/devices/'
+
+# This is an exception handler for when the device is not properly connected.
+# Because the glob.glob gives us an array of devices, and the code specifically
+# asks for the first device in the array, if there is no device the code would
+# fail in a non-Nagios-friendly way without the handler.
 
 try:
     unit_dir = glob.glob(therm_dir + '28*')[0]
